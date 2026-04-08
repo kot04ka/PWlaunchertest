@@ -1,0 +1,185 @@
+﻿<Window x:Class="PWlaunchertest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Prime World Classic Launcher"
+        Width="1000"
+        Height="640"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="#0b1a1f">
+
+    <Grid>
+
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#0f2c33" Offset="0"/>
+                <GradientStop Color="#061417" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- HEADER -->
+        <Grid Height="60" VerticalAlignment="Top" Background="#111111">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="80" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="PRIME WORLD CLASSIC"
+                       Foreground="#00e5ff"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0" />
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,0">
+                <Button Content="_"
+                        Width="30"
+                        Height="26"
+                        Margin="0,0,6,0"
+                        Click="Min_Click" />
+                <Button Content="X"
+                        Width="30"
+                        Height="26"
+                        Click="Close_Click" />
+            </StackPanel>
+        </Grid>
+
+        <!-- MAIN -->
+        <Grid Margin="0,60,0,70">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT -->
+            <Grid Grid.Column="0">
+                <Border Margin="20"
+                        CornerRadius="12"
+                        Background="#101e24"
+                        BorderBrush="#1f4f59"
+                        BorderThickness="1">
+                    <Grid>
+                        <TextBlock Text="ЗДЕСЬ БУДЕТ АРТ / БАННЕР"
+                                   Foreground="#44626a"
+                                   FontSize="28"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- RIGHT -->
+            <Border Grid.Column="1"
+                    Margin="20"
+                    Padding="20"
+                    CornerRadius="12"
+                    Background="#0f1b20"
+                    BorderBrush="#1f4f59"
+                    BorderThickness="1">
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Stretch">
+
+                    <TextBlock Text="Панель запуска"
+                               Foreground="White"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Margin="0,0,0,18" />
+
+                    <Button Height="60"
+                            Margin="0,0,0,15"
+                            Background="#1b2838"
+                            Foreground="White"
+                            FontSize="14"
+                            Click="Steam_Click"
+                            Content="Войти через Steam" />
+
+                    <Button Height="70"
+                            Margin="0,0,0,15"
+                            Background="#00c8ff"
+                            Foreground="Black"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Click="Play_Click"
+                            Content="ИГРАТЬ" />
+
+                    <Button Height="50"
+                            Margin="0,0,0,10"
+                            Background="#2a475e"
+                            Foreground="White"
+                            Click="ChooseFolder_Click"
+                            Content="Выбрать папку" />
+
+                    <Border Background="#16242b"
+                            BorderBrush="#31525b"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="10"
+                            Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Папка установки:"
+                                       Foreground="#9fd7e2"
+                                       FontSize="12"
+                                       Margin="0,0,0,6" />
+                            <TextBlock x:Name="InstallPathText"
+                                       Text="Папка не выбрана"
+                                       Foreground="White"
+                                       TextWrapping="Wrap"
+                                       FontSize="13" />
+                        </StackPanel>
+                    </Border>
+
+                    <Button Height="50"
+                            Margin="0,0,0,10"
+                            Background="#2a475e"
+                            Foreground="White"
+                            Click="Install_Click"
+                            Content="Установить игру" />
+
+                    <Button Height="50"
+                            Margin="0,0,0,10"
+                            Background="#2a475e"
+                            Foreground="White"
+                            Click="Update_Click"
+                            Content="Обновить" />
+
+                    <Button Height="50"
+                            Background="#2a475e"
+                            Foreground="White"
+                            Click="Check_Click"
+                            Content="Проверить файлы" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- FOOTER -->
+        <Grid Height="70" VerticalAlignment="Bottom" Background="#111111">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="220" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel VerticalAlignment="Center" Margin="20,0,0,0">
+                <TextBlock x:Name="StatusText"
+                           Text="Статус: Готов"
+                           Foreground="#00e5ff"
+                           FontSize="14" />
+                <TextBlock Text="Версия клиента: 0.0.1"
+                           Foreground="#8a8a8a"
+                           FontSize="12"
+                           Margin="0,4,0,0" />
+            </StackPanel>
+
+            <TextBlock Grid.Column="1"
+                       Text="Prime World Classic Launcher"
+                       Foreground="#888888"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Margin="0,0,20,0" />
+        </Grid>
+
+    </Grid>
+</Window>
