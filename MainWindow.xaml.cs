@@ -1,134 +1,175 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
+using PWlaunchertest.Models;
+using PWlaunchertest.Services;
 using Forms = System.Windows.Forms;
 
 namespace PWlaunchertest
 {
     public partial class MainWindow : Window
     {
-        private string _installPath = string.Empty;
+        private LauncherConfig _config = new LauncherConfig();
+        private string _resolvedGamePath = string.Empty;
 
         public MainWindow()
         {
             InitializeComponent();
+            InitializeLauncher();
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
+        private void InitializeLauncher()
         {
-            Close();
+            _config = ConfigService.Load();
+
+            string? foundPath = GameLocatorService.FindInstalledGame(_config.InstallPath);
+
+            if (!string.IsNullOrWhiteSpace(foundPath))
+            {
+                _resolvedGamePath = foundPath;
+                _config.InstallPath = foundPath;
+                ConfigService.Save(_config);
+
+                GameStatusText.Text = "Игра: найдена";
+                UpdateStatusText.Text = "Обновления: клиент обнаружен";
+                InstallStatusText.Text = "Установка: повторная установка не требуется";
+                StatusText.Text = "Статус: игра найдена";
+                LauncherProgressBar.Value = 100;
+            }
+            else
+            {
+                _resolvedGamePath = string.Empty;
+
+                GameStatusText.Text = "Игра: не найдена";
+                UpdateStatusText.Text = "Обновления: клиент пока не обнаружен";
+                InstallStatusText.Text = "Установка: укажи папку вручную или установи игру";
+                StatusText.Text = "Статус: игра не найдена";
+                LauncherProgressBar.Value = 0;
+            }
         }
 
-        private void Min_Click(object sender, RoutedEventArgs e)
+        private void Header_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
 
-        private void Steam_Click(object sender, RoutedEventArgs e)
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show(
-                "Steam пока не подключен.",
-                "Steam",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            Close();
         }
 
-        private void Play_Click(object sender, RoutedEventArgs e)
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_installPath))
+            if (string.IsNullOrWhiteSpace(_resolvedGamePath))
             {
-                System.Windows.MessageBox.Show(
-                    "Сначала выбери папку установки.",
-                    "Ошибка",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                StatusText.Text = "Статус: нельзя запустить, игра не найдена";
+                LauncherProgressBar.Value = 0;
                 return;
             }
 
-            System.Windows.MessageBox.Show(
-                $"Позже здесь будет запуск игры из папки:\n{_installPath}",
-                "Играть",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            StatusText.Text = "Статус: игра найдена, запуск подключим следующим этапом";
+            LauncherProgressBar.Value = 100;
         }
 
-        private void ChooseFolder_Click(object sender, RoutedEventArgs e)
+        private void ChooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
             using Forms.FolderBrowserDialog dialog = new Forms.FolderBrowserDialog();
 
-            dialog.Description = "Выберите папку для установки Prime World Classic";
+            dialog.Description = "Выберите папку, где расположена игра Prime World Classic";
             dialog.UseDescriptionForTitle = true;
-            dialog.ShowNewFolderButton = true;
+            dialog.ShowNewFolderButton = false;
 
-            if (!string.IsNullOrWhiteSpace(_installPath) && Directory.Exists(_installPath))
+            if (!string.IsNullOrWhiteSpace(_resolvedGamePath))
             {
-                dialog.InitialDirectory = _installPath;
+                dialog.InitialDirectory = _resolvedGamePath;
             }
 
             Forms.DialogResult result = dialog.ShowDialog();
 
-            if (result == Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
-            {
-                _installPath = dialog.SelectedPath;
-                InstallPathText.Text = _installPath;
-                StatusText.Text = "Статус: папка установки выбрана";
-            }
-        }
+            if (result != Forms.DialogResult.OK || string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                return;
 
-        private void Install_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_installPath))
+            string? resolvedPath = GameLocatorService.ResolveGamePath(dialog.SelectedPath);
+
+            if (string.IsNullOrWhiteSpace(resolvedPath))
             {
+                GameStatusText.Text = "Игра: не найдена";
+                UpdateStatusText.Text = "Обновления: клиент не обнаружен";
+                InstallStatusText.Text = "Установка: выбранная папка не подходит";
+                StatusText.Text = "Статус: в выбранной папке игра не найдена";
+                LauncherProgressBar.Value = 0;
+
                 System.Windows.MessageBox.Show(
-                    "Сначала выбери папку установки.",
-                    "Ошибка",
+                    "В выбранной папке не найден корректный клиент Prime World Classic.\n\n" +
+                    "Можно указывать как саму папку игры, так и корневую Steam-папку игры, если внутри есть Game или Launcher.",
+                    "Игра не найдена",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
+
                 return;
             }
 
+            _resolvedGamePath = resolvedPath;
+            _config.InstallPath = resolvedPath;
+            ConfigService.Save(_config);
+
+            GameStatusText.Text = "Игра: найдена";
+            UpdateStatusText.Text = "Обновления: клиент обнаружен";
+            InstallStatusText.Text = "Установка: путь сохранен";
+            StatusText.Text = "Статус: путь к игре успешно сохранен";
+            LauncherProgressBar.Value = 100;
+
             System.Windows.MessageBox.Show(
-                $"Позже сюда добавим установку игры в папку:\n{_installPath}",
-                "Установка",
+                $"Папка игры успешно определена:\n{resolvedPath}",
+                "Путь сохранен",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
 
-        private void Update_Click(object sender, RoutedEventArgs e)
+        private void InstallButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_installPath))
+            if (string.IsNullOrWhiteSpace(_resolvedGamePath))
             {
-                System.Windows.MessageBox.Show(
-                    "Сначала выбери папку установки.",
-                    "Ошибка",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                StatusText.Text = "Статус: клиент не найден, установка будет доступна следующим этапом";
+                LauncherProgressBar.Value = 10;
                 return;
             }
 
-            System.Windows.MessageBox.Show(
-                $"Позже сюда добавим обновление клиента в папке:\n{_installPath}",
-                "Обновление",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            StatusText.Text = "Статус: игра уже найдена, установка не требуется";
+            LauncherProgressBar.Value = 100;
         }
 
-        private void Check_Click(object sender, RoutedEventArgs e)
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_installPath))
+            if (string.IsNullOrWhiteSpace(_resolvedGamePath))
             {
-                System.Windows.MessageBox.Show(
-                    "Сначала выбери папку установки.",
-                    "Ошибка",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                StatusText.Text = "Статус: обновление недоступно, игра не найдена";
+                LauncherProgressBar.Value = 0;
                 return;
             }
 
-            System.Windows.MessageBox.Show(
-                $"Позже сюда добавим проверку файлов в папке:\n{_installPath}",
-                "Проверка файлов",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            StatusText.Text = "Статус: игра найдена, модуль обновления будет добавлен следующим этапом";
+            LauncherProgressBar.Value = 30;
+        }
+
+        private void CheckFilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_resolvedGamePath))
+            {
+                StatusText.Text = "Статус: проверка невозможна, игра не найдена";
+                LauncherProgressBar.Value = 0;
+                return;
+            }
+
+            StatusText.Text = "Статус: проверка файлов будет подключена следующим этапом";
+            LauncherProgressBar.Value = 45;
         }
     }
 }

@@ -4,182 +4,583 @@
         Title="Prime World Classic Launcher"
         Width="1000"
         Height="640"
+        MinWidth="1000"
+        MinHeight="640"
+        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize"
-        Background="#0b1a1f">
+        Background="Transparent"
+        AllowsTransparency="True">
 
-    <Grid>
+    <Border CornerRadius="10"
+            BorderBrush="#3EA7B8"
+            BorderThickness="1.2"
+            Background="#07141B">
 
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#0f2c33" Offset="0"/>
-                <GradientStop Color="#061417" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="54"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="92"/>
+            </Grid.RowDefinitions>
 
-        <!-- HEADER -->
-        <Grid Height="60" VerticalAlignment="Top" Background="#111111">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="80" />
-            </Grid.ColumnDefinitions>
+            <!-- Общий фон -->
+            <Grid Grid.RowSpan="3">
+                <Grid.Background>
+                    <ImageBrush ImageSource="Assets/Images/bg.jpg"
+                                Stretch="Fill"
+                                Opacity="0.22"/>
+                </Grid.Background>
+                <Rectangle Fill="#D9061118"/>
+            </Grid>
 
-            <TextBlock Text="PRIME WORLD CLASSIC"
-                       Foreground="#00e5ff"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="20,0,0,0" />
+            <!-- Верхняя панель -->
+            <Border Grid.Row="0"
+                    Background="#CC0B1B24"
+                    BorderBrush="#285564"
+                    BorderThickness="0,0,0,1"
+                    MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="110"/>
+                    </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0,0,10,0">
-                <Button Content="_"
-                        Width="30"
-                        Height="26"
-                        Margin="0,0,6,0"
-                        Click="Min_Click" />
-                <Button Content="X"
-                        Width="30"
-                        Height="26"
-                        Click="Close_Click" />
-            </StackPanel>
-        </Grid>
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="14,0,0,0">
+                        <Image Source="/Assets/Images/logo.png"
+                               Width="160"
+                               Height="36"
+                               Stretch="Uniform"
+                               Margin="0,0,10,0"/>
+                        <TextBlock Text="CLASSIC"
+                                   Foreground="#C7F8FF"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
 
-        <!-- MAIN -->
-        <Grid Margin="0,60,0,70">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.3*" />
-                <ColumnDefinition Width="1*" />
-            </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1"
+                               Text="Игровой лаунчер"
+                               Foreground="#79D5E3"
+                               FontSize="12"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
 
-            <!-- LEFT -->
-            <Grid Grid.Column="0">
-                <Border Margin="20"
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0,0,12,0">
+                        <Button Width="36"
+                                Height="26"
+                                Margin="0,0,8,0"
+                                Content="—"
+                                Click="MinimizeButton_Click"
+                                Cursor="Hand"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Foreground="#E4FBFF"
+                                BorderThickness="0"
+                                Background="#18303A">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#245062"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Width="36"
+                                Height="26"
+                                Content="✕"
+                                Click="CloseButton_Click"
+                                Cursor="Hand"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#FFE8EC"
+                                BorderThickness="0"
+                                Background="#4D1E27">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#8E2740"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Основная часть -->
+            <Grid Grid.Row="1" Margin="16,14,16,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="360"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Левая область -->
+                <Border Grid.Column="0"
+                        Margin="0,0,16,0"
                         CornerRadius="12"
-                        Background="#101e24"
-                        BorderBrush="#1f4f59"
-                        BorderThickness="1">
+                        Background="#6D0D1D26"
+                        BorderBrush="#2C5A67"
+                        BorderThickness="1.1"
+                        Padding="12">
                     <Grid>
-                        <TextBlock Text="ЗДЕСЬ БУДЕТ АРТ / БАННЕР"
-                                   Foreground="#44626a"
-                                   FontSize="28"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Блок логотипа -->
+                        <Border Grid.Row="0"
+                                CornerRadius="10"
+                                Background="#9C10222C"
+                                BorderBrush="#376775"
+                                BorderThickness="1"
+                                Padding="12"
+                                Margin="0,0,0,12">
+                            <DockPanel LastChildFill="True">
+                                <Image Source="Assets/Images/logo.png"
+                                       Width="220"
+                                       Stretch="Uniform"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left"/>
+
+                                <StackPanel HorizontalAlignment="Right"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="Prime World Classic"
+                                               Foreground="#EAFDFF"
+                                               FontSize="22"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right"/>
+                                    <TextBlock Text="Готовность клиента и обновлений"
+                                               Foreground="#88D8E3"
+                                               FontSize="12"
+                                               HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Контент слева -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.1*"/>
+                                <ColumnDefinition Width="0.9*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Арт -->
+                            <Border Grid.Column="0"
+                                    CornerRadius="12"
+                                    Margin="0,0,12,0"
+                                    Background="#5C0D1A22"
+                                    BorderBrush="#2B5863"
+                                    BorderThickness="1">
+                                <Grid>
+                                    <Image Source="Assets/Images/hero.png"
+                                           Stretch="UniformToFill"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Bottom"/>
+
+                                    <Rectangle VerticalAlignment="Bottom" Height="140">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#00FFFFFF" Offset="0"/>
+                                                <GradientStop Color="#D9071218" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </Border>
+
+                            <!-- Инфоблоки -->
+                            <StackPanel Grid.Column="1">
+                                <Border CornerRadius="10"
+                                        Background="#9C12212A"
+                                        BorderBrush="#386370"
+                                        BorderThickness="1"
+                                        Padding="14"
+                                        Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock Text="Новости"
+                                                   Foreground="#EEFCFF"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"/>
+                                        <TextBlock Text="— Добро пожаловать в Prime World Classic"
+                                                   Foreground="#B9E7EF"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"
+                                                   TextWrapping="Wrap"/>
+                                        <TextBlock Text="— Здесь будут патчноуты и важные объявления"
+                                                   Foreground="#99D2DC"
+                                                   FontSize="12"
+                                                   Margin="0,8,0,0"
+                                                   TextWrapping="Wrap"/>
+                                        <TextBlock Text="— На этапе 1 реализуется только визуальный интерфейс"
+                                                   Foreground="#99D2DC"
+                                                   FontSize="12"
+                                                   Margin="0,8,0,0"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border CornerRadius="10"
+                                        Background="#9C12212A"
+                                        BorderBrush="#386370"
+                                        BorderThickness="1"
+                                        Padding="14"
+                                        Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock Text="Состояние"
+                                                   Foreground="#EEFCFF"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"/>
+                                        <TextBlock x:Name="GameStatusText"
+                                                   Text="Игра: состояние пока не определено"
+                                                   Foreground="#9EDCF7"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"/>
+                                        <TextBlock x:Name="UpdateStatusText"
+                                                   Text="Обновления: модуль еще не подключен"
+                                                   Foreground="#9EDCF7"
+                                                   FontSize="13"
+                                                   Margin="0,6,0,0"/>
+                                        <TextBlock x:Name="InstallStatusText"
+                                                   Text="Установка: визуальная стадия"
+                                                   Foreground="#9FE7AA"
+                                                   FontSize="13"
+                                                   Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border CornerRadius="10"
+                                        Background="#9C12212A"
+                                        BorderBrush="#386370"
+                                        BorderThickness="1"
+                                        Padding="14">
+                                    <StackPanel>
+                                        <TextBlock Text="Подсказка"
+                                                   Foreground="#EEFCFF"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"/>
+                                        <TextBlock Text="Кнопки запуска, установки и обновления пока подключены только визуально."
+                                                   Foreground="#A9D9E2"
+                                                   FontSize="12"
+                                                   Margin="0,10,0,0"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Правая панель -->
+                <Border Grid.Column="1"
+                        CornerRadius="12"
+                        Background="#BB0D1821"
+                        BorderBrush="#2E5965"
+                        BorderThickness="1.1"
+                        Padding="16">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="14"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Панель запуска"
+                                   Foreground="#F2FCFF"
+                                   FontSize="24"
+                                   FontWeight="Bold"/>
+
+                        <Button Grid.Row="2"
+                                Height="64"
+                                Content="ИГРАТЬ"
+                                Click="PlayButton_Click"
+                                Cursor="Hand"
+                                Foreground="#06131A"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                BorderThickness="0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="PlayButtonBorder"
+                                            CornerRadius="12"
+                                            Background="#34E5FF"
+                                            BorderBrush="#A0FCFF"
+                                            BorderThickness="1.6">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="PlayButtonBorder" Property="Background" Value="#69EEFF"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="PlayButtonBorder" Property="Background" Value="#13BEDA"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button Grid.Row="4"
+                                Height="48"
+                                Content="ВЫБРАТЬ ПАПКУ"
+                                Click="ChooseFolderButton_Click"
+                                Cursor="Hand"
+                                Foreground="#EAFBFF"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Background="#1A3A49">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="#4D8190"
+                                                        BorderThickness="1"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#255265"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Grid.Row="6"
+                                Height="48"
+                                Content="УСТАНОВИТЬ ИГРУ"
+                                Click="InstallButton_Click"
+                                Cursor="Hand"
+                                Foreground="#EAFBFF"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Background="#1A3A49">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="#4D8190"
+                                                        BorderThickness="1"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#255265"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Grid.Row="8"
+                                Height="48"
+                                Content="ОБНОВИТЬ"
+                                Click="UpdateButton_Click"
+                                Cursor="Hand"
+                                Foreground="#EAFBFF"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Background="#1A3A49">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="#4D8190"
+                                                        BorderThickness="1"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#255265"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Grid.Row="10"
+                                Height="48"
+                                Content="ПРОВЕРИТЬ ФАЙЛЫ"
+                                Click="CheckFilesButton_Click"
+                                Cursor="Hand"
+                                Foreground="#EAFBFF"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Background="#1A3A49">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="#4D8190"
+                                                        BorderThickness="1"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#255265"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Border Grid.Row="11"
+                                Margin="0,18,0,0"
+                                CornerRadius="10"
+                                Background="#7E12202A"
+                                BorderBrush="#315C67"
+                                BorderThickness="1"
+                                Padding="12"
+                                VerticalAlignment="Top">
+                            <StackPanel>
+                                <TextBlock Text="Этап разработки"
+                                           Foreground="#EEFCFF"
+                                           FontSize="16"
+                                           FontWeight="Bold"/>
+                                <TextBlock Text="Сейчас собрана визуальная часть лаунчера."
+                                           Foreground="#9CE7A6"
+                                           FontSize="13"
+                                           Margin="0,10,0,0"
+                                           TextWrapping="Wrap"/>
+                                <TextBlock Text="Механика автоопределения, установки и обновлений будет подключаться следующим этапом."
+                                           Foreground="#8CD5E0"
+                                           FontSize="12"
+                                           Margin="0,6,0,0"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
                     </Grid>
                 </Border>
             </Grid>
 
-            <!-- RIGHT -->
-            <Border Grid.Column="1"
-                    Margin="20"
-                    Padding="20"
-                    CornerRadius="12"
-                    Background="#0f1b20"
-                    BorderBrush="#1f4f59"
-                    BorderThickness="1">
-                <StackPanel VerticalAlignment="Center"
-                            HorizontalAlignment="Stretch">
+            <!-- Нижняя панель -->
+            <Border Grid.Row="2"
+                    Background="#D907131A"
+                    BorderBrush="#334B5C"
+                    BorderThickness="0,1,0,0">
+                <Grid Margin="16,10,16,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="24"/>
+                    </Grid.RowDefinitions>
 
-                    <TextBlock Text="Панель запуска"
-                               Foreground="White"
-                               FontSize="22"
-                               FontWeight="Bold"
-                               Margin="0,0,0,18" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="220"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Height="60"
-                            Margin="0,0,0,15"
-                            Background="#1b2838"
-                            Foreground="White"
-                            FontSize="14"
-                            Click="Steam_Click"
-                            Content="Войти через Steam" />
-
-                    <Button Height="70"
-                            Margin="0,0,0,15"
-                            Background="#00c8ff"
-                            Foreground="Black"
-                            FontSize="18"
-                            FontWeight="Bold"
-                            Click="Play_Click"
-                            Content="ИГРАТЬ" />
-
-                    <Button Height="50"
-                            Margin="0,0,0,10"
-                            Background="#2a475e"
-                            Foreground="White"
-                            Click="ChooseFolder_Click"
-                            Content="Выбрать папку" />
-
-                    <Border Background="#16242b"
-                            BorderBrush="#31525b"
-                            BorderThickness="1"
-                            CornerRadius="8"
-                            Padding="10"
-                            Margin="0,0,0,15">
-                        <StackPanel>
-                            <TextBlock Text="Папка установки:"
-                                       Foreground="#9fd7e2"
-                                       FontSize="12"
-                                       Margin="0,0,0,6" />
-                            <TextBlock x:Name="InstallPathText"
-                                       Text="Папка не выбрана"
-                                       Foreground="White"
-                                       TextWrapping="Wrap"
-                                       FontSize="13" />
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <TextBlock x:Name="StatusText"
+                                       Text="Статус: визуальный интерфейс готов"
+                                       Foreground="#A4F1B0"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="Следующий этап: автоопределение игры, установка и обновление"
+                                       Foreground="#89CED8"
+                                       FontSize="11"
+                                       Margin="0,4,0,0"/>
                         </StackPanel>
-                    </Border>
 
-                    <Button Height="50"
-                            Margin="0,0,0,10"
-                            Background="#2a475e"
-                            Foreground="White"
-                            Click="Install_Click"
-                            Content="Установить игру" />
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right">
+                            <TextBlock Text="Версия лаунчера"
+                                       Foreground="#D8F7FB"
+                                       FontSize="12"
+                                       HorizontalAlignment="Right"/>
+                            <TextBlock Text="0.0.1 UI Preview"
+                                       Foreground="#7DD9E4"
+                                       FontSize="13"
+                                       FontWeight="Bold"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
 
-                    <Button Height="50"
-                            Margin="0,0,0,10"
-                            Background="#2a475e"
-                            Foreground="White"
-                            Click="Update_Click"
-                            Content="Обновить" />
-
-                    <Button Height="50"
-                            Background="#2a475e"
-                            Foreground="White"
-                            Click="Check_Click"
-                            Content="Проверить файлы" />
-                </StackPanel>
+                    <ProgressBar Grid.Row="2"
+                                 x:Name="LauncherProgressBar"
+                                 Minimum="0"
+                                 Maximum="100"
+                                 Value="18"
+                                 Height="20"
+                                 Foreground="#31DDF8"
+                                 Background="#13232B"
+                                 BorderBrush="#396774"
+                                 BorderThickness="1"/>
+                </Grid>
             </Border>
         </Grid>
-
-        <!-- FOOTER -->
-        <Grid Height="70" VerticalAlignment="Bottom" Background="#111111">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="220" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel VerticalAlignment="Center" Margin="20,0,0,0">
-                <TextBlock x:Name="StatusText"
-                           Text="Статус: Готов"
-                           Foreground="#00e5ff"
-                           FontSize="14" />
-                <TextBlock Text="Версия клиента: 0.0.1"
-                           Foreground="#8a8a8a"
-                           FontSize="12"
-                           Margin="0,4,0,0" />
-            </StackPanel>
-
-            <TextBlock Grid.Column="1"
-                       Text="Prime World Classic Launcher"
-                       Foreground="#888888"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       Margin="0,0,20,0" />
-        </Grid>
-
-    </Grid>
+    </Border>
 </Window>

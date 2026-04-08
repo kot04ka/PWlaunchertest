@@ -12,6 +12,7 @@ C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-win
 C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\PWlaunchertest.AssemblyInfoInputs.cache
 C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\PWlaunchertest.AssemblyInfo.cs
 C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\PWlaunchertest.csproj.CoreCompileInputs.cache
+C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\PWlaunchertest.sourcelink.json
 C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\PWlaunchertest.dll
 C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\refint\PWlaunchertest.dll
 C:\Users\Social\source\repos\PWlaunchertest\PWlaunchertest\obj\Debug\net10.0-windows\PWlaunchertest.pdb

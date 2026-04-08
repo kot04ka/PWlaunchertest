@@ -9,4 +9,28 @@
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="Assets\Images\bg.jpg" />
+	  <None Remove="Assets\Images\hero.png" />
+	  <None Remove="Assets\Images\logo.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Assets\Icons\" />
+	  <Folder Include="Data\" />
+	  <Folder Include="Logs\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Assets\Images\bg.jpg">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Assets\Images\hero.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Assets\Images\logo.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
 </Project>
