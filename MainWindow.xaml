@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Prime World Classic Launcher"
         Width="1000"
-        Height="640"
+        Height="680"
         MinWidth="1000"
-        MinHeight="640"
+        MinHeight="680"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -21,10 +21,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="54"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="92"/>
+                <RowDefinition Height="108"/>
             </Grid.RowDefinitions>
 
-            <!-- Общий фон -->
             <Grid Grid.RowSpan="3">
                 <Grid.Background>
                     <ImageBrush ImageSource="Assets/Images/bg.jpg"
@@ -34,7 +33,6 @@
                 <Rectangle Fill="#D9061118"/>
             </Grid>
 
-            <!-- Верхняя панель -->
             <Border Grid.Row="0"
                     Background="#CC0B1B24"
                     BorderBrush="#285564"
@@ -51,7 +49,7 @@
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center"
                                 Margin="14,0,0,0">
-                        <Image Source="/Assets/Images/logo.png"
+                        <Image Source="Assets/Images/logo.png"
                                Width="160"
                                Height="36"
                                Stretch="Uniform"
@@ -135,14 +133,12 @@
                 </Grid>
             </Border>
 
-            <!-- Основная часть -->
             <Grid Grid.Row="1" Margin="16,14,16,14">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.2*"/>
                     <ColumnDefinition Width="360"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Левая область -->
                 <Border Grid.Column="0"
                         Margin="0,0,16,0"
                         CornerRadius="12"
@@ -156,7 +152,6 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Блок логотипа -->
                         <Border Grid.Row="0"
                                 CornerRadius="10"
                                 Background="#9C10222C"
@@ -186,14 +181,12 @@
                             </DockPanel>
                         </Border>
 
-                        <!-- Контент слева -->
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1.1*"/>
                                 <ColumnDefinition Width="0.9*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Арт -->
                             <Border Grid.Column="0"
                                     CornerRadius="12"
                                     Margin="0,0,12,0"
@@ -217,7 +210,6 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Инфоблоки -->
                             <StackPanel Grid.Column="1">
                                 <Border CornerRadius="10"
                                         Background="#9C12212A"
@@ -240,7 +232,7 @@
                                                    FontSize="12"
                                                    Margin="0,8,0,0"
                                                    TextWrapping="Wrap"/>
-                                        <TextBlock Text="— На этапе 1 реализуется только визуальный интерфейс"
+                                        <TextBlock Text="— Лаунчер уже умеет искать игру и сохранять путь установки"
                                                    Foreground="#99D2DC"
                                                    FontSize="12"
                                                    Margin="0,8,0,0"
@@ -270,7 +262,7 @@
                                                    FontSize="13"
                                                    Margin="0,6,0,0"/>
                                         <TextBlock x:Name="InstallStatusText"
-                                                   Text="Установка: визуальная стадия"
+                                                   Text="Установка: путь пока не выбран"
                                                    Foreground="#9FE7AA"
                                                    FontSize="13"
                                                    Margin="0,6,0,0"/>
@@ -287,7 +279,7 @@
                                                    Foreground="#EEFCFF"
                                                    FontSize="18"
                                                    FontWeight="Bold"/>
-                                        <TextBlock Text="Кнопки запуска, установки и обновления пока подключены только визуально."
+                                        <TextBlock Text="Можно отдельно указать уже установленную игру и отдельно выбрать папку, куда игра будет устанавливаться."
                                                    Foreground="#A9D9E2"
                                                    FontSize="12"
                                                    Margin="0,10,0,0"
@@ -299,7 +291,6 @@
                     </Grid>
                 </Border>
 
-                <!-- Правая панель -->
                 <Border Grid.Column="1"
                         CornerRadius="12"
                         Background="#BB0D1821"
@@ -310,6 +301,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="14"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="12"/>
                             <RowDefinition Height="Auto"/>
@@ -360,8 +353,8 @@
 
                         <Button Grid.Row="4"
                                 Height="48"
-                                Content="ВЫБРАТЬ ПАПКУ"
-                                Click="ChooseFolderButton_Click"
+                                Content="УКАЗАТЬ ИГРУ"
+                                Click="ChooseGameExeButton_Click"
                                 Cursor="Hand"
                                 Foreground="#EAFBFF"
                                 FontSize="14"
@@ -393,6 +386,40 @@
                         </Button>
 
                         <Button Grid.Row="6"
+                                Height="48"
+                                Content="ВЫБРАТЬ ПУТЬ УСТАНОВКИ"
+                                Click="ChooseInstallPathButton_Click"
+                                Cursor="Hand"
+                                Foreground="#EAFBFF"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Background="#1A3A49">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="#4D8190"
+                                                        BorderThickness="1"
+                                                        CornerRadius="10">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#255265"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Grid.Row="8"
                                 Height="48"
                                 Content="УСТАНОВИТЬ ИГРУ"
                                 Click="InstallButton_Click"
@@ -426,7 +453,7 @@
                             </Button.Style>
                         </Button>
 
-                        <Button Grid.Row="8"
+                        <Button Grid.Row="10"
                                 Height="48"
                                 Content="ОБНОВИТЬ"
                                 Click="UpdateButton_Click"
@@ -460,7 +487,7 @@
                             </Button.Style>
                         </Button>
 
-                        <Button Grid.Row="10"
+                        <Button Grid.Row="12"
                                 Height="48"
                                 Content="ПРОВЕРИТЬ ФАЙЛЫ"
                                 Click="CheckFilesButton_Click"
@@ -494,7 +521,7 @@
                             </Button.Style>
                         </Button>
 
-                        <Border Grid.Row="11"
+                        <Border Grid.Row="13"
                                 Margin="0,18,0,0"
                                 CornerRadius="10"
                                 Background="#7E12202A"
@@ -507,12 +534,12 @@
                                            Foreground="#EEFCFF"
                                            FontSize="16"
                                            FontWeight="Bold"/>
-                                <TextBlock Text="Сейчас собрана визуальная часть лаунчера."
+                                <TextBlock Text="Сейчас подключены поиск игры, указание exe и выбор пути установки."
                                            Foreground="#9CE7A6"
                                            FontSize="13"
                                            Margin="0,10,0,0"
                                            TextWrapping="Wrap"/>
-                                <TextBlock Text="Механика автоопределения, установки и обновлений будет подключаться следующим этапом."
+                                <TextBlock Text="Следующим этапом сюда можно подключать установку и обновление клиента."
                                            Foreground="#8CD5E0"
                                            FontSize="12"
                                            Margin="0,6,0,0"
@@ -523,7 +550,6 @@
                 </Border>
             </Grid>
 
-            <!-- Нижняя панель -->
             <Border Grid.Row="2"
                     Background="#D907131A"
                     BorderBrush="#334B5C"
@@ -543,11 +569,11 @@
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock x:Name="StatusText"
-                                       Text="Статус: визуальный интерфейс готов"
+                                       Text="Статус: интерфейс готов"
                                        Foreground="#A4F1B0"
                                        FontSize="13"
                                        FontWeight="SemiBold"/>
-                            <TextBlock Text="Следующий этап: автоопределение игры, установка и обновление"
+                            <TextBlock Text="Следующий этап: установка, обновление и проверка файлов"
                                        Foreground="#89CED8"
                                        FontSize="11"
                                        Margin="0,4,0,0"/>
@@ -560,7 +586,7 @@
                                        Foreground="#D8F7FB"
                                        FontSize="12"
                                        HorizontalAlignment="Right"/>
-                            <TextBlock Text="0.0.1 UI Preview"
+                            <TextBlock Text="0.0.3 Logic Preview"
                                        Foreground="#7DD9E4"
                                        FontSize="13"
                                        FontWeight="Bold"
@@ -573,7 +599,7 @@
                                  x:Name="LauncherProgressBar"
                                  Minimum="0"
                                  Maximum="100"
-                                 Value="18"
+                                 Value="0"
                                  Height="20"
                                  Foreground="#31DDF8"
                                  Background="#13232B"

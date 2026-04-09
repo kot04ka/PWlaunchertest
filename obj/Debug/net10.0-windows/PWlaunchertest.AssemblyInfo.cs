@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PWlaunchertest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+852d2a276286c5eaa00aa837a45095e216d46dd2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+232323e5f350ece3831b47fd867c63bbb4ae249d")]
 [assembly: System.Reflection.AssemblyProductAttribute("PWlaunchertest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PWlaunchertest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

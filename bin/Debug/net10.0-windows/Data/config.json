@@ -1,3 +1,5 @@
 {
-  "InstallPath": ""
+  "GameExePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Prime World Classic\\Launcher\\PWClassic.exe",
+  "InstallPath": "C:\\Users\\Social\\Pictures\\AnyDesk",
+  "BaseInstallManifestPath": "Data/base-install-manifest.json"
 }

@@ -7,93 +7,74 @@ namespace PWlaunchertest.Services
 {
     public static class GameLocatorService
     {
-        private static readonly string[] PossibleExeNames =
+        private const string GameExeName = "PWClassic.exe";
+
+        private static readonly string[] RequiredFiles =
         {
-            "PrimeWorld.exe",
-            "primeworld.exe"
+            "nw.dll",
+            "resources.pak"
         };
 
-        private static readonly string[] AdditionalMarkers =
+        private static readonly string[] RequiredFolders =
         {
-            "bin",
-            "data.pak",
-            "heroes",
-            "profiles",
-            "Launcher",
-            "Game"
+            "locales"
         };
 
-        public static string? FindInstalledGame(string? configuredPath = null)
+        public static string? FindInstalledGameExe(string? configuredExePath = null)
         {
-            string? resolvedConfigured = ResolveGamePath(configuredPath);
+            string? resolvedConfigured = ResolveGameExePath(configuredExePath);
             if (!string.IsNullOrWhiteSpace(resolvedConfigured))
                 return resolvedConfigured;
 
             foreach (string path in GetCommonPaths())
             {
-                string? resolved = ResolveGamePath(path);
+                string? resolved = ResolveGameExePath(path);
                 if (!string.IsNullOrWhiteSpace(resolved))
                     return resolved;
-            }
-
-            foreach (string root in GetAvailableRoots())
-            {
-                string? found = SearchInRoot(root, 2);
-                if (!string.IsNullOrWhiteSpace(found))
-                    return found;
             }
 
             return null;
         }
 
-        public static bool IsValidGamePath(string? path)
+        public static bool IsValidGameExe(string? exePath)
         {
-            return !string.IsNullOrWhiteSpace(ResolveGamePath(path));
+            return !string.IsNullOrWhiteSpace(ResolveGameExePath(exePath));
         }
 
-        public static string? ResolveGamePath(string? inputPath)
+        public static string? ResolveGameExePath(string? inputPath)
         {
             if (string.IsNullOrWhiteSpace(inputPath))
                 return null;
 
             try
             {
+                if (File.Exists(inputPath))
+                {
+                    if (string.Equals(Path.GetFileName(inputPath), GameExeName, StringComparison.OrdinalIgnoreCase)
+                        && IsValidLauncherFolder(Path.GetDirectoryName(inputPath)!))
+                    {
+                        return Path.GetFullPath(inputPath);
+                    }
+
+                    return null;
+                }
+
                 if (!Directory.Exists(inputPath))
                     return null;
 
-                string normalized = Path.GetFullPath(inputPath);
+                string fullDirectory = Path.GetFullPath(inputPath);
 
-                if (LooksLikeGameFolder(normalized))
-                    return normalized;
+                if (IsValidLauncherFolder(fullDirectory))
+                    return Path.Combine(fullDirectory, GameExeName);
 
-                string[] childCandidates =
-                {
-                    Path.Combine(normalized, "Game"),
-                    Path.Combine(normalized, "Launcher"),
-                    Path.Combine(normalized, "game"),
-                    Path.Combine(normalized, "launcher")
-                };
+                string launcherSubFolder = Path.Combine(fullDirectory, "Launcher");
+                if (IsValidLauncherFolder(launcherSubFolder))
+                    return Path.Combine(launcherSubFolder, GameExeName);
 
-                foreach (string candidate in childCandidates)
+                foreach (string subDir in Directory.EnumerateDirectories(fullDirectory))
                 {
-                    if (LooksLikeGameFolder(candidate))
-                        return candidate;
-                }
-
-                IEnumerable<string> subDirs;
-                try
-                {
-                    subDirs = Directory.EnumerateDirectories(normalized);
-                }
-                catch
-                {
-                    return null;
-                }
-
-                foreach (string dir in subDirs)
-                {
-                    if (LooksLikeGameFolder(dir))
-                        return dir;
+                    if (IsValidLauncherFolder(subDir))
+                        return Path.Combine(subDir, GameExeName);
                 }
 
                 return null;
@@ -104,35 +85,27 @@ namespace PWlaunchertest.Services
             }
         }
 
-        private static bool LooksLikeGameFolder(string path)
+        public static bool IsValidLauncherFolder(string? folderPath)
         {
-            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+            if (string.IsNullOrWhiteSpace(folderPath))
                 return false;
 
-            bool hasExe = PossibleExeNames.Any(exe => File.Exists(Path.Combine(path, exe)));
-            if (!hasExe)
+            if (!Directory.Exists(folderPath))
                 return false;
 
-            bool hasAdditionalMarker = AdditionalMarkers.Any(marker =>
-            {
-                string full = Path.Combine(path, marker);
-                return Directory.Exists(full) || File.Exists(full);
-            });
+            string exePath = Path.Combine(folderPath, GameExeName);
+            if (!File.Exists(exePath))
+                return false;
 
-            return hasAdditionalMarker || HasKnownGameStructure(path);
+            bool hasRequiredFiles = RequiredFiles.All(file => File.Exists(Path.Combine(folderPath, file)));
+            bool hasRequiredFolders = RequiredFolders.All(dir => Directory.Exists(Path.Combine(folderPath, dir)));
+
+            return hasRequiredFiles && hasRequiredFolders;
         }
 
-        private static bool HasKnownGameStructure(string path)
+        public static bool IsGameInstalledInDirectory(string? path)
         {
-            string[] knownFiles =
-            {
-                Path.Combine(path, "bin"),
-                Path.Combine(path, "profiles"),
-                Path.Combine(path, "heroes"),
-                Path.Combine(path, "data.pak")
-            };
-
-            return knownFiles.Any(p => Directory.Exists(p) || File.Exists(p));
+            return !string.IsNullOrWhiteSpace(ResolveGameExePath(path));
         }
 
         private static IEnumerable<string> GetCommonPaths()
@@ -142,101 +115,21 @@ namespace PWlaunchertest.Services
 
             return new[]
             {
-                Path.Combine(pf, "Prime World"),
-                Path.Combine(pf, "Prime World Classic"),
-                Path.Combine(pfx86, "Prime World"),
-                Path.Combine(pfx86, "Prime World Classic"),
                 Path.Combine(pfx86, "Steam", "steamapps", "common", "Prime World Classic"),
-                Path.Combine(pfx86, "Steam", "steamapps", "common", "Prime World"),
-                Path.Combine(@"C:\Games", "Prime World"),
+                Path.Combine(pfx86, "Steam", "steamapps", "common", "Prime World Classic", "Launcher"),
+                Path.Combine(pf, "Prime World Classic"),
+                Path.Combine(pf, "Prime World Classic", "Launcher"),
+                Path.Combine(pfx86, "Prime World Classic"),
+                Path.Combine(pfx86, "Prime World Classic", "Launcher"),
                 Path.Combine(@"C:\Games", "Prime World Classic"),
-                Path.Combine(@"D:\Games", "Prime World"),
+                Path.Combine(@"C:\Games", "Prime World Classic", "Launcher"),
                 Path.Combine(@"D:\Games", "Prime World Classic"),
-                @"C:\Prime World",
+                Path.Combine(@"D:\Games", "Prime World Classic", "Launcher"),
                 @"C:\Prime World Classic",
-                @"D:\Prime World",
-                @"D:\Prime World Classic"
+                @"C:\Prime World Classic\Launcher",
+                @"D:\Prime World Classic",
+                @"D:\Prime World Classic\Launcher"
             };
-        }
-
-        private static IEnumerable<string> GetAvailableRoots()
-        {
-            try
-            {
-                return DriveInfo.GetDrives()
-                    .Where(d => d.IsReady && d.DriveType == DriveType.Fixed)
-                    .Select(d => d.RootDirectory.FullName);
-            }
-            catch
-            {
-                return Array.Empty<string>();
-            }
-        }
-
-        private static string? SearchInRoot(string rootPath, int maxDepth)
-        {
-            try
-            {
-                return SearchRecursive(rootPath, 0, maxDepth);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private static string? SearchRecursive(string currentPath, int currentDepth, int maxDepth)
-        {
-            if (currentDepth > maxDepth)
-                return null;
-
-            string? resolved = ResolveGamePath(currentPath);
-            if (!string.IsNullOrWhiteSpace(resolved))
-                return resolved;
-
-            IEnumerable<string> subDirectories;
-            try
-            {
-                subDirectories = Directory.EnumerateDirectories(currentPath);
-            }
-            catch
-            {
-                return null;
-            }
-
-            foreach (string dir in subDirectories)
-            {
-                string dirName = Path.GetFileName(dir);
-                if (IsIgnoredDirectory(dirName))
-                    continue;
-
-                string? found = SearchRecursive(dir, currentDepth + 1, maxDepth);
-                if (!string.IsNullOrWhiteSpace(found))
-                    return found;
-            }
-
-            return null;
-        }
-
-        private static bool IsIgnoredDirectory(string directoryName)
-        {
-            if (string.IsNullOrWhiteSpace(directoryName))
-                return true;
-
-            string[] ignored =
-            {
-                "Windows",
-                "ProgramData",
-                "$Recycle.Bin",
-                "System Volume Information",
-                "Recovery",
-                "PerfLogs",
-                "Temp",
-                "tmp",
-                "AppData"
-            };
-
-            return ignored.Any(x => string.Equals(x, directoryName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
